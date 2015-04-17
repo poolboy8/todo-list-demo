@@ -11,6 +11,10 @@ class TasksController < ApplicationController
   # GET /tasks/1
   # GET /tasks/1.json
   def show
+    if @task.user_id != current_user.id
+      flash[:danger] = 'You are not authorized to do this'
+      redirect_to root_url
+    end
   end
 
   # GET /tasks/new
@@ -41,6 +45,11 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
   def update
+    if @task.user_id != current_user.id
+      flash[:danger] = 'You are not authorized to do this'
+      redirect_to root_url
+    end
+    
     respond_to do |format|
       if @task.update(task_params)
         format.html { redirect_to @task, notice: 'Task was successfully updated.' }
@@ -55,6 +64,11 @@ class TasksController < ApplicationController
   # DELETE /tasks/1
   # DELETE /tasks/1.json
   def destroy
+    if @task.user_id != current_user.id
+      flash[:danger] = 'You are not authorized to do this'
+      redirect_to root_url
+    end
+    
     @task.destroy
     respond_to do |format|
       format.html { redirect_to tasks_url, notice: 'Task was successfully destroyed.' }
